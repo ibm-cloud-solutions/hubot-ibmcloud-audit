@@ -6,7 +6,7 @@
   */
 'use strict';
 
-process.env.HUBOT_AUDIT_ENDPOINT = 'http://estest';
+process.env.HUBOT_AUDIT_ENDPOINT = 'https://estest';
 
 const es = require('../src/scripts/lib/es');
 const Helper = require('hubot-test-helper');

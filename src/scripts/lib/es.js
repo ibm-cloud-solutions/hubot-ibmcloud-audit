@@ -31,11 +31,6 @@ module.exports = {
 					}
 				}
 			});
-			client = new elasticsearch.Client({
-				host: AUDIT_ENDPOINT,
-				maxSockets: 1000,
-				requestTimeout: 60000
-			});
 		}
 		return client;
 	},
