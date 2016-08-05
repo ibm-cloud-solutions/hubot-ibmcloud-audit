@@ -165,12 +165,18 @@ function recordAdapterCall(context, next, done) {
 
 				var currTime = new Date().getTime();
 
+				var emailAddress = context.response.message.user.email_address;
+
+				if (!emailAddress && context.response.message.user.profile) {
+					emailAddress = context.response.message.user.profile.email;
+				}
+
 				var body = {
 					index: adapterIndexName,
 					type: incomingAdapterStr,
 					body:
 						transformToAdapterLogEntry(context.response.message.user.name,
-							context.response.message.user.email_address,
+							emailAddress,
 							context.response.message.text,
 							context.response.message.user.room,
 							adapterName, robotName, currTime)
