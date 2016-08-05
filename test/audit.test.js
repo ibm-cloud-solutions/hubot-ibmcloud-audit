@@ -89,7 +89,8 @@ describe('Test test via Slack', function() {
 			context.response.message = {};
 			context.response.message.text = 'Hello World';
 			context.response.message.user = {};
-			context.response.message.user.email_address = 'testuser@test.com';
+			context.response.message.user.profile = {};
+			context.response.message.user.profile.email = 'testuser@test.com';
 			audit.recordAdapterCall(context, function() {
 				expect(context.response.message.isLogged).to.equal(true);
 				done();
