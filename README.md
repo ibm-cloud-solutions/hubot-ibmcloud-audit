@@ -5,7 +5,27 @@
 
 # hubot-ibmcloud-audit
 
-This project is used by to keep an audit trail of Hubot activities.  It captures both incoming adapter traffic and outgoing HTTP traffic (to other sites and services). Incoming adapter traffic is captured in an type of `AdapterLogEntry` with an index of `hubotadapterrequest`.  The incoming adapter traffic is captured by hooking into the Hubot framework via a [Hubot middleware listener](https://github.com/github/hubot/blob/master/docs/scripting.md#listener-middleware). Logic has been added to the listener so that even if there are multiple matches the input will only be logged once.  
+This project is used to keep an audit trail of Hubot activities in Elasticsearch.
+
+## Getting Started
+  * [Usage](#usage)
+	* [Overview](#overview)
+  * [License](#license)
+  * [Contribute](#contribute)
+
+## Usage
+
+Steps for adding this to your hubot:
+
+1. cd into your hubot directory
+2. Install this package via `npm install hubot-ibmcloud-audit --save`
+3. Add `hubot-ibmcloud-audit` to your external-scripts.json
+4. Add the necessary environment variables:
+
+`HUBOT_AUDIT_ENDPOINT`=location of Elasticsearch
+
+## Overview
+`hubot-ibmcloud-audit` captures both incoming adapter traffic and outgoing HTTP traffic (to other sites and services). Incoming adapter traffic is captured in an type of `AdapterLogEntry` with an index of `hubotadapterrequest`.  The incoming adapter traffic is captured by hooking into the Hubot framework via a [Hubot middleware listener](https://github.com/github/hubot/blob/master/docs/scripting.md#listener-middleware). Logic has been added to the listener so that even if there are multiple matches the input will only be logged once.  
 
 The information captured includes:
 * UUID, spaceid, and groupid:  These are applicable to a hubot running inside a docker container.  They will default to `DEFAULT_UUID`, `DEFAULT_SPACE`, and `DEFAULT_GROUP` if the Hubot is not running inside a container.
