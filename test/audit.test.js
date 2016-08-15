@@ -38,10 +38,10 @@ describe('Test test via Slack', function() {
 	context('creating log entries', function() {
 
 		it('should create a proper adapter log entry', function() {
-			var logEntry = audit.transformToAdapterLogEntry('Test User', 'testuser', 'some text', 'testroom', 'slack', 'testbot');
+			var logEntry = audit.transformToAdapterLogEntry('Test User', 'testuser', 'some text', 'testroomid', 'testroom', 'slack', 'testbot');
 
 			var correct = {uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE', groupId: 'DEFAULT_GROUP', isIncomingRequest: true,
-				userName: 'Test User', userId: 'testuser', text: 'some text', room: 'testroom', adapter: 'slack', robot: 'testbot', timestamp: logEntry.timestamp};
+				userName: 'Test User', userId: 'testuser', text: 'some text', room: 'testroomid', roomName: 'testroom', adapter: 'slack', robot: 'testbot', timestamp: logEntry.timestamp};
 			expect(logEntry).to.deep.equal(correct);
 		});
 
