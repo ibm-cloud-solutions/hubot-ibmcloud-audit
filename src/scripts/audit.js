@@ -148,8 +148,8 @@ function recordAdapterCall(context, next, done) {
 		}
 
 		if (context.response.message.isLogged === undefined) {
-			// ignore messages that don't have text or that come from the user hubot which runs tests
-			if (context.response.message.text && context.response.message.user.name !== 'hubot') {
+			// ignore messages that don't have text or a user or that come from the user hubot which runs tests
+			if (context.response.message.text && context.response.message.user && context.response.message.user.name !== 'hubot') {
 				if (bot) {
 					bot.logger.debug(`${TAG}: setting context.response.message.isLogged to true`);
 				}
