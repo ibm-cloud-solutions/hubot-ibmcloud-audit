@@ -168,7 +168,10 @@ function recordAdapterCall(context, next, done) {
 
 				var roomName = 'unknown';
 				if (bot && bot.adapter && bot.adapter.client) {
-					roomName = bot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(context.response.message.user.room);
+					var roomObj = bot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(context.response.message.user.room);
+					if (roomObj.name) {
+						roomName = roomObj.name;
+					}
 				}
 
 				var currTime = new Date().getTime();
