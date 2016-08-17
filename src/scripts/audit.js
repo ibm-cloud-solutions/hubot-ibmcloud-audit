@@ -161,17 +161,29 @@ function recordAdapterCall(context, next, done) {
 					adapterName = bot.adapterName;
 				}
 
+				if (bot) {
+					bot.logger.debug(`${TAG}: setting adapter name to ` + adapterName);
+				}
+
 				var robotName = 'unknown';
 				if (bot) {
 					robotName = bot.name;
 				}
 
+				if (bot) {
+					bot.logger.debug(`${TAG}: setting robotName to ` + robotName);
+				}
+
 				var roomName = 'unknown';
-				if (bot && bot.adapter && bot.adapter.client) {
+				if (bot && bot.adapter && bot.adapter.client && bot.adapter.client.rtm && bot.adapter.client.rtm.dataStore) {
 					var roomObj = bot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(context.response.message.user.room);
 					if (roomObj.name) {
 						roomName = roomObj.name;
 					}
+				}
+
+				if (bot) {
+					bot.logger.debug(`${TAG}: setting room name to ` + roomName);
 				}
 
 				var currTime = new Date().getTime();
