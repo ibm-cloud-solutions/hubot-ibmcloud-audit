@@ -1,6 +1,6 @@
 {
   "name": "hubot-ibmcloud-audit",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "hubot-ibmcloud-audit",
   "main": "index.js",
   "respository": {
