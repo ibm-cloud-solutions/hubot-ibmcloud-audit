@@ -38,15 +38,15 @@ describe('Test test via Slack', function() {
 	context('creating log entries', function() {
 
 		it('should create a proper adapter log entry', function() {
-			var logEntry = audit.transformToAdapterLogEntry('Test User', 'testuser', 'some text', 'testroomid', 'testroom', 'slack', 'testbot');
+			let logEntry = audit.transformToAdapterLogEntry('Test User', 'testuser', 'some text', 'testroomid', 'testroom', 'slack', 'testbot');
 
-			var correct = {uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE', groupId: 'DEFAULT_GROUP', isIncomingRequest: true,
+			let correct = {uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE', groupId: 'DEFAULT_GROUP', isIncomingRequest: true,
 				userName: 'Test User', userId: 'testuser', text: 'some text', room: 'testroomid', roomName: 'testroom', adapter: 'slack', robot: 'testbot', timestamp: logEntry.timestamp};
 			expect(logEntry).to.deep.equal(correct);
 		});
 
 		it('should create a proper HTTP log entry', function() {
-			var request = {};
+			let request = {};
 			request.headers = {};
 			request.headers.host = 'www.cnn.com';
 			request.path = '/requestpath';
@@ -54,12 +54,12 @@ describe('Test test via Slack', function() {
 			request.protocol = 'http';
 			request.body = {foo: 'bar'};
 
-			var response = {};
+			let response = {};
 			response.statusCode = 200;
 
-			var logEntry = audit.transformToHttpLogEntry(request, response, true);
+			let logEntry = audit.transformToHttpLogEntry(request, response, true);
 
-			var correct = {uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE', groupId: 'DEFAULT_GROUP', statusCode: 200, protocol: 'http', url: 'www.cnn.com/requestpath', host: 'www.cnn.com', method: 'GET',
+			let correct = {uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE', groupId: 'DEFAULT_GROUP', statusCode: 200, protocol: 'http', url: 'www.cnn.com/requestpath', host: 'www.cnn.com', method: 'GET',
 			isIncomingRequest: true, timestamp: logEntry.timestamp, body: '{"foo":"bar"}'};
 			expect(logEntry).to.deep.equal(correct);
 		});
@@ -84,7 +84,7 @@ describe('Test test via Slack', function() {
 			userId: 'testuser@test.com', adapter: 'unknown', robot: 'hubot' }).reply(200, {
 			});
 
-			var context = {};
+			let context = {};
 			context.response = {};
 			context.response.message = {};
 			context.response.message.text = 'Hello World';
@@ -103,7 +103,7 @@ describe('Test test via Slack', function() {
 			userId: 'testuser@test.com', adapter: 'unknown', robot: 'unknown' }).reply(200, {
 			});
 
-			var context = {};
+			let context = {};
 			context.response = {};
 			context.response.message = {};
 			context.response.message.user = {};
@@ -119,12 +119,12 @@ describe('Test test via Slack', function() {
 		it('should add an http entry to elastic search', function(done) {
 			process.env.HUBOT_BLUEMIX_AUDIT_DISABLED = false;
 
-			var logging = nock(es.audit_endpoint).post('/hubothttprequest/HttpLogEntry', { uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE',
+			let logging = nock(es.audit_endpoint).post('/hubothttprequest/HttpLogEntry', { uuid: 'DEFAULT_UUID', spaceId: 'DEFAULT_SPACE',
 			statusCode: 200, protocol: 'http', url: 'www.cnn.com/requestpath', host: 'www.cnn.com', method: 'GET', isIncomingRequest: 'false',
 			body: '{"foo":"bar"}'}).reply(200, {
 			});
 
-			var request = {};
+			let request = {};
 			request.headers = {};
 			request.headers.host = 'www.cnn.com';
 			request.path = '/requestpath';
@@ -132,7 +132,7 @@ describe('Test test via Slack', function() {
 			request.protocol = 'http';
 			request.body = {foo: 'bar'};
 
-			var response = {};
+			let response = {};
 			response.statusCode = 200;
 			audit.saveLog(request, response, 'false');
 
