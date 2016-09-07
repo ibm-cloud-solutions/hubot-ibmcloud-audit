@@ -3,28 +3,28 @@
 
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const gRequestLogger = require('global-request-logger');
 
-var bot = null;
-var uuid = process.env.uuid || 'DEFAULT_UUID';
-var spaceId = process.env.space_id || 'DEFAULT_SPACE';
-var groupId = process.env.group_id || 'DEFAULT_GROUP';
+let bot = null;
+const uuid = process.env.uuid || 'DEFAULT_UUID';
+const spaceId = process.env.space_id || 'DEFAULT_SPACE';
+const groupId = process.env.group_id || 'DEFAULT_GROUP';
 
-var adapterIndexName = 'hubotadapterrequest';
-var httpIndexName = 'hubothttprequest';
+const adapterIndexName = 'hubotadapterrequest';
+const httpIndexName = 'hubothttprequest';
 
-var incomingAdapterStr = 'AdapterLogEntry';
-var incomingHttpStr = 'HttpLogEntry';
+const incomingAdapterStr = 'AdapterLogEntry';
+const incomingHttpStr = 'HttpLogEntry';
 
-var es = require('./lib/es');
-var esClient = es.init();
+const es = require('./lib/es');
+const esClient = es.init();
 
-var esHost = es.audit_endpoint;
+const esHost = es.audit_endpoint;
 
-var blacklistedHosts = [removeProtocol(esHost), 'api.slack.com/api/'];
+const blacklistedHosts = [removeProtocol(esHost), 'api.slack.com/api/'];
 
 gRequestLogger.initialize();
 
@@ -43,14 +43,14 @@ gRequestLogger.on('error', function(request, response) {
 });
 
 function auditDisabled() {
-	var isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' || process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'true'));
-	var isNotDefined = !es.audit_endpoint;
+	let isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' || process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'true'));
+	let isNotDefined = !es.audit_endpoint;
 	return isDisabled || isNotDefined;
 }
 
 function removeProtocol(url) {
 	if (url) {
-		var newUrl = url;
+		let newUrl = url;
 		if (url.indexOf('http://') >= 0) {
 			newUrl = url.substring(7, url.length);
 		}
@@ -62,7 +62,7 @@ function removeProtocol(url) {
 }
 
 function transformToAdapterLogEntry(name, userId, text, room, roomName, adapterName, robotName, timestamp) {
-	var entry = {
+	let entry = {
 		uuid: uuid,
 		spaceId: spaceId,
 		groupId: groupId,
@@ -79,14 +79,14 @@ function transformToAdapterLogEntry(name, userId, text, room, roomName, adapterN
 }
 
 function transformToHttpLogEntry(request, response, isIncoming) {
-	var protocol = request.protocol || 'http:';
+	let protocol = request.protocol || 'http:';
 
 	if (protocol.endsWith(':')) {
 		protocol = protocol.substring(0, (protocol.length) - 1);
 	}
 
-	var host = request.headers.host;
-	var entry = {
+	let host = request.headers.host;
+	let entry = {
 		uuid: uuid,
 		spaceId: spaceId,
 		groupId: groupId,
@@ -104,7 +104,7 @@ function transformToHttpLogEntry(request, response, isIncoming) {
 	}
 
 	if (isIncoming) {
-		var body = JSON.stringify(request.body);
+		let body = JSON.stringify(request.body);
 		entry.body = body;
 	}
 	return entry;
@@ -112,7 +112,7 @@ function transformToHttpLogEntry(request, response, isIncoming) {
 
 function isValidHRef(entryHost) {
 
-	for (var i = 0; i < blacklistedHosts.length; i++) {
+	for (let i = 0; i < blacklistedHosts.length; i++) {
 		if (entryHost.indexOf(blacklistedHosts[i]) >= 0) {
 			return false;
 		}
@@ -122,10 +122,10 @@ function isValidHRef(entryHost) {
 
 function saveLog(request, response, isIncoming, type) {
 	if (!auditDisabled()) {
-		var entryBody = transformToHttpLogEntry(request, response, isIncoming);
+		let entryBody = transformToHttpLogEntry(request, response, isIncoming);
 		if (typeof entryBody.host !== 'undefined' && isValidHRef(entryBody.url)) {
 			// Request was not to ES so persist it
-			var body =
+			let body =
 				{index: httpIndexName,
 					type: incomingHttpStr,
 					body: entryBody};
@@ -156,7 +156,7 @@ function recordAdapterCall(context, next, done) {
 				}
 				context.response.message.isLogged = true;
 
-				var adapterName = 'unknown';
+				let adapterName = 'unknown';
 				if (bot && bot.adapterName !== null) {
 					adapterName = bot.adapterName;
 				}
@@ -165,7 +165,7 @@ function recordAdapterCall(context, next, done) {
 					bot.logger.debug(`${TAG}: setting adapter name to ` + adapterName);
 				}
 
-				var robotName = 'unknown';
+				let robotName = 'unknown';
 				if (bot) {
 					robotName = bot.name;
 				}
@@ -174,9 +174,9 @@ function recordAdapterCall(context, next, done) {
 					bot.logger.debug(`${TAG}: setting robotName to ` + robotName);
 				}
 
-				var roomName = 'unknown';
+				let roomName = 'unknown';
 				if (bot && bot.adapter && bot.adapter.client && bot.adapter.client.rtm && bot.adapter.client.rtm.dataStore) {
-					var roomObj = bot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(context.response.message.user.room);
+					let roomObj = bot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(context.response.message.user.room);
 					if (roomObj.name) {
 						roomName = roomObj.name;
 					}
@@ -186,15 +186,15 @@ function recordAdapterCall(context, next, done) {
 					bot.logger.debug(`${TAG}: setting room name to ` + roomName);
 				}
 
-				var currTime = new Date().getTime();
+				let currTime = new Date().getTime();
 
-				var emailAddress = context.response.message.user.email_address;
+				let emailAddress = context.response.message.user.email_address;
 
 				if (!emailAddress && context.response.message.user.profile) {
 					emailAddress = context.response.message.user.profile.email;
 				}
 
-				var body = {
+				let body = {
 					index: adapterIndexName,
 					type: incomingAdapterStr,
 					body:
