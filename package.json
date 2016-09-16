@@ -3,10 +3,6 @@
   "version": "0.0.17",
   "description": "hubot-ibmcloud-audit",
   "main": "index.js",
-  "respository": {
-    "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-audit",
-    "type": "git"
-  },
   "scripts": {
     "start": "source config/env && hubot -a shell",
     "slack": "source config/env && hubot -a slack",
